@@ -1,0 +1,4 @@
+TotalCount	777
+negative	5
+positive	5
+uncertainty	6

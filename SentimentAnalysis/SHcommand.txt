@@ -1,0 +1,34 @@
+export date=2021-1-16
+
+cd StockInput
+
+wget https://aldrichopenstorage.s3.amazonaws.com/refinedNewsFile/refinedNewsFile-${date}
+
+
+hadoop fs -rm -r /StockInput
+
+hadoop fs -mkdir /StockInput
+
+hadoop fs -copyFromLocal refinedNewsFile-${date} /StockInput
+
+cd ..
+
+hadoop fs -rm -r /StockOutput
+ 
+$HADOOP_HOME/bin/hadoop jar StockAnalyze.jar /StockInput /StockOutput
+
+$HADOOP_HOME/bin/hdfs dfs -cat /StockOutput/part-r-00000
+
+$HADOOP_HOME/bin/hdfs dfs -cat /StockOutput/part-r-00000 >./StockOutput/Result-${date}.txt
+
+
+start-dfs.sh
+
+start-yarn.sh
+
+mr-jobhistory-daemon.sh start historyserver
+
+
+javac -cp $HADOOP_CLASSPATH -d . StockMapper.java StockReducer.java StockDriver.java
+
+jar cfm StockAnalyze.jar Manifest.txt analyze/*.class
