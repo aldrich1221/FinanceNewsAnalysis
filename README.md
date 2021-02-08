@@ -2,3 +2,5 @@
 
 ![image](NewsSentimentAnalysisSystemArchitecture.png)
 
+![image](results.png)
+
